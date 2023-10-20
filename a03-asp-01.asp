@@ -38,9 +38,7 @@
         }
         else
         {
-          // generate the random number which has a maximum random number gets from the user
-          let randomNum = Math.trunc(Math.random() * maxNumber) + 1;
-          console.log(`Random Number is ${randomNum}.`);
+          document.InitialMaxNumForm.submit();
         }
       }
     }
@@ -49,19 +47,40 @@
   <body id="body">
     <!-- ASP Script -->
     <%
-      dim name
+      dim userName
+      dim maxNum
 
-      name=Request.Form("name")
+      userName=Request.Form("userName")
 
-      if(name <> "") then
-        Response.Cookies(name) = Name
+      if(userName <> "") then
+        if(maxNum = "") then
+          maxNum=Request.Form("initalMaxNum")
+          Response.Write(maxNum)
+        else
+          maxNum=Request.Form("newMaxNum")
+          Response.Write(maxNum)
+          
       end if
     %>
 
-    <!-- HTML -->
-    <h1> Hi <%=name%>! Please enter the maximum number you want! </h1>
-    <input  id="maxNum"  type="number" class="max-num" placeholder="Enter the maximum number"></input>
-    <input type="button" class="range-submit" onclick="numValidate()">Submit</input>
-    <div    id="rangeError" class = "range-error"  style="color:red;"></div>
-  </body>e
+    <% if (maxNum = "") then %>
+      <form action="a03-asp-01.asp" method="post" name="InitialMaxNumForm">
+        <h1> Hi <%=userName%>! Please enter the maximum number you want! </h1>
+        <input id="maxNum" name="initalMaxNum"  type="number" class="max-num" placeholder="Enter the maximum number"/>
+        <input type="button" class="range-submit" onclick="numValidate()" value="Submit"/>
+      </form>
+    <% elseif (maxNum < 1) then %>
+      <form actuion="a03-asp-01.asp" method="post" name="InvalidMaxNumForm">
+        <h1> Hi <%=userName%>! Please enter the maximum number you want! </h1>
+        <input id="maxNum" name="newMaxNum"  type="number" class="max-num" placeholder="Enter the maximum number"/>
+        <input type="button" class="range-submit" onclick="numValidate()" value="Submit"/>
+        <div   id="rangeError" class = "range-error"  style="color:red;"></div>
+      </form>
+    <% else %>
+
+    <% end if %>
+    
+      
+    
+  </body>
 </html>
