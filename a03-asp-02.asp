@@ -50,15 +50,11 @@
       userName=Request.Cookies("userName")
       maxNum=Request.Form("maxNum")
 
-      randomNum=Request.Cookies("randomNum")
-      lowHintRange=Request.Cookies("lowHintRange")
-      highHintRange= Request.Cookies("highHintRange")
+      randomNum=CInt(Request.Cookies("randomNum"))
+      lowHintRange=CInt(Request.Cookies("lowHintRange"))
+      highHintRange=CInt(Request.Cookies("highHintRange"))
 
-      guessNum=Request.Form("guessNum")
-
-      Response.Write(randomNum)
-      Response.Write(maxNum)
-      Response.Write(guessNum)
+      guessNum=CInt(Request.Form("guessNum"))      
 
 
       ' If page successfully gets the maxNum, create the maxNum cookie 
@@ -66,44 +62,26 @@
       
       if(maxNum <> "") then
         Response.Cookies("maxNum") = maxNum
-
         ' (initialize) If radom number is not generated, create random number and make its cookie
         Randomize
         randomNum = Int((maxNum*Rnd) + 1)
         if(randomNum <> "") then
           Response.Cookies("randomNum") = randomNum
         end if
-
         ' (initialize) If low hint range is blank, set lowHintRange as 1 and make its cookie 
         lowHintRange = 1
         if(lowHintRange <> "") then
           Response.Cookies("lowHintRange") = lowHintRange
         end if
-
         ' (initialize) If high hint range is blank, set highHintRange as 1 and make its cookie 
         highHintRange = maxNum 
         if(highHintRange <> "") then
           Response.Cookies("highHintRange") = highHintRange
         end if
-
       else
-        maxNum=Request.Cookies("maxNum")
+        maxNum=CInt(Request.Cookies("maxNum"))
       end if
-
-
-      if ( (guessNum < maxNum) and (guessNum > 1) ) then
-
-        if (guessNum < randomNum) then
-          lowHintRange = guessNum + 1
-        elseif (guessNum > randomNum) then
-          highHintRange = guessNum - 1
-        elseif (guessNum = randomNum) then
-          Set form = document.getElementById("GameWin")
-          form.submit()
-        end if
-      else
-        Response.Write(" Out of range")
-      end if
+      
 
     %>
 
@@ -113,8 +91,37 @@
         <h1>Hey <%=userName%> Guess the your number!</h1>
         <input  id="guessNum" name="guessNum"  type="number" class="guess-num" placeholder="Guess the number"></input>
         <input  type="button" class="guess-submit" onclick="numValidate()" value="Make This Guess" /> 
+
+        <%
+        Response.Write("<p> guessNum : " & guessNum & "</p>")
+        Response.Write("<p> maxNum   : " & maxNum & "</p>")
+        Response.Write("<p> randomNum: " & randomNum & "</p>")
+        Response.Write("<p> lowHintRange : " & lowHintRange & "</p>")
+        Response.Write("<p> highHintRange: " & highHintRange & "</p>")
+        
+
+        if ( (guessNum < maxNum) and (guessNum > 1) ) then
+
+          if ( (guessNum < randomNum) and (guessNum >= lowHintRange) ) then
+            lowHintRange = guessNum + 1
+            Response.Cookies("lowHintRange") = lowHintRange
+
+          elseif ( (guessNum > randomNum) and (guessNum <= highHintRange) ) then
+            highHintRange = guessNum - 1
+            Response.Cookies("highHintRange") = highHintRange
+
+          elseif (guessNum = randomNum) then
+            Set form = document.getElementById("GameWin")
+            form.submit()
+          end if
+
+        else
+          Response.Write(" <div style=""color:red;""> Out of range </div>")
+        end if
+        %>
         <p id = "hint"> Your allowable guessing range is any value between <%=lowHintRange%> and <%=highHintRange%> </p>
-        <div    id="guessError" class="guess-error" style="color:red;"></div>
+        <div id="guessError" class="guess-error" style="color:red;"></div>
+
       </div>
     </form>
 
