@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<!--
+	This sample script demonstrates an example of getting user input and also using JavaScript to
+	perform input-level validation as well as business-level (domain) validation.  Note that
+	business-level validation is being done in JavaScript since this is a single web page solution
+	with no "server-side" functionality.  As is the case with validation - it is important to give
+	the user comprehensive feedback as to issues found
+-->
+
+<html>
+  <head>
+    <title> HI-LO GAME </title> 
+  </head>
+
+  <script type="text/javascript">
+
+
+     /* Function name: nameValidate()                                                              */
+     /* Discription  : This function checks the name validation and prompt the error messages.     */
+     /*               - Error Lists: 1.blank error  2.alphabet error                                 */
+     /* Parameter    : void                                                                        */
+     /* Return Value : void                                                                        */
+     function nameValidate() 
+     {
+      
+      let userInput  = document.getElementById("nameSpace").value;
+      let nameLength = (userInput.trim()).length;
+
+
+      // clean up the UI from the previous use
+      document.getElementById("nameError").innerHTML = "";
+
+      // Check whether the user entered the blank input or not
+      if (nameLength == 0)
+      {
+        document.getElementById("nameError").innerHTML = "Your name <b>cannot</b> be BLANK.";
+      }
+      else 
+	    {
+	  	  // setup the regex for alpha characters and spaces
+        /* // : It stanfs forbeginning and end of the pattern delimit the regex pattern 
+         * ^  : This is an anchor that signifies the start of the regular expression. It indicates that the pattern should match from the very
+         *     beginning of the striA-Z: This matches any uppercase letter from 'A' to 'Z'
+         * a-z: This matches any lowercase letter from 'a' to 'z'
+         * \s : This represents whitespace characters, including spaces, tabs, and newline characters
+         * +  : This quantifier means that the preceding character class [A-Za-z\s] should match one or more characters.
+         */
+	  	  let lettersNSpaces = /^[A-Z a-z \s]+$/;
+        if(userInput.match(lettersNSpaces))
+        {
+            document.NameForm.submit();
+        }
+        else
+        {
+          document.getElementById("nameError").innerHTML = "Your name must be made of <b>alpha</b> characters <u>only</u>.";
+        }
+	   	}
+    }
+  </script>
+    
+
+  <body id="body">    
+    <!-- First section: Getting user name -->
+    <form action="a03-asp-01.asp" method="post" name="NameForm">
+      <h1> Hi there! Please enter your name! </h1>
+      <input id="nameSpace"  type="text" name="userName" class="name-space" placeholder="Enter your name"/>
+      <input type="button" class="name-submit" onclick="nameValidate()" value="Submit"/>
+      <div   id="nameError" class = "name-error" style="color:red;"/>
+    </form>
+  </body>
+</html>
