@@ -63,44 +63,31 @@
 
       ' If page successfully gets the maxNum, create the maxNum cookie 
       ' Every resubmition, reassign the maxNum using 'maxnum' cookie
+      
       if(maxNum <> "") then
         Response.Cookies("maxNum") = maxNum
-      else
-        maxNum=Request.Cookies("maxNum")
-      end if
 
-
-      ' (initialize) If radom number is not generated, create random number and make its cookie
-      if(randomNum = "") then
+        ' (initialize) If radom number is not generated, create random number and make its cookie
         Randomize
         randomNum = Int((maxNum*Rnd) + 1)
-
         if(randomNum <> "") then
           Response.Cookies("randomNum") = randomNum
         end if
 
-      end if
-
-
-      ' (initialize) If low hint range is blank, set lowHintRange as 1 and make its cookie 
-      if(lowHintRange = "") then
+        ' (initialize) If low hint range is blank, set lowHintRange as 1 and make its cookie 
         lowHintRange = 1
-
         if(lowHintRange <> "") then
           Response.Cookies("lowHintRange") = lowHintRange
         end if
 
-      end if
-
-
-      ' (initialize) If high hint range is blank, set highHintRange as 1 and make its cookie 
-      if(highHintRange = "") then
+        ' (initialize) If high hint range is blank, set highHintRange as 1 and make its cookie 
         highHintRange = maxNum 
-
         if(highHintRange <> "") then
           Response.Cookies("highHintRange") = highHintRange
         end if
 
+      else
+        maxNum=Request.Cookies("maxNum")
       end if
 
 
